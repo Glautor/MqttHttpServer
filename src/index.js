@@ -25,9 +25,31 @@ app.post('/sendMessage', (req, res) => {
 app.post('/getTemperature', (req, res) => {
     try {
         const temperatureInstance = new TemperatureSingleton();
-        console.log(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor()));
-        // res.send(`${temperatureInstance.getTemp()}`);
-        res.send(temperatureInstance.getTemperatureSensor());
+        console.log(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor())['temperature']);
+        res.send(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor())['temperature']);
+    } catch(error) {
+        console.log(error);
+        res.send(error);
+    }
+});
+
+var humidity = 0;
+event = () => {
+    setTimeout(() => {
+        if(humidity < 100) {
+            humidity = humidity + 7;
+        } else {
+            humidity = 0;
+        }
+        event();
+    }, 5000);
+}
+
+event();
+
+app.post('/getHumidity', (req, res) => {
+    try {
+        res.send(`${humidity}%`);
     } catch(error) {
         console.log(error);
         res.send(error);
