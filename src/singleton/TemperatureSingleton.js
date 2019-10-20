@@ -1,7 +1,7 @@
 var messages = require('../models/messages');
 
 class TemperatureSingleton {
-    constructor(temp = "", temperatureSensor) {
+    constructor(temp = '', temperatureSensor) {
         if (!!TemperatureSingleton.instance) {
             return TemperatureSingleton.instance;
         }

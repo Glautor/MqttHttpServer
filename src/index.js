@@ -33,20 +33,6 @@ app.post('/getTemperature', (req, res) => {
     }
 });
 
-var humidity = 0;
-event = () => {
-    setTimeout(() => {
-        if(humidity < 100) {
-            humidity = humidity + 7;
-        } else {
-            humidity = 0;
-        }
-        event();
-    }, 5000);
-}
-
-event();
-
 app.post('/getHumidity', (req, res) => {
     try {
         res.send(`${humidity}%`);
@@ -64,6 +50,20 @@ app.post('/startConnection', (req, res) => {
         res.send(error);
     }
 });
+
+var humidity = 0;
+event = () => {
+    setTimeout(() => {
+        if(humidity < 100) {
+            humidity = humidity + 7;
+        } else {
+            humidity = 0;
+        }
+        event();
+    }, 5000);
+}
+
+event();
 
 app.listen(4000, () => {
     console.log(`Server running on port 4000`)
