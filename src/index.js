@@ -13,6 +13,16 @@ const TOPIC = 'devices/recebe';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.get('/test', (req, res) => {
+    try {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+        res.json({200: "success"});
+    } catch(error) {
+        res.send(error);
+    }
+});
+
 app.post('/sendMessage', (req, res) => {
     try {
         mqttConnection(TOPIC, req.body.message);
@@ -25,7 +35,7 @@ app.post('/sendMessage', (req, res) => {
 app.post('/getTemperature', (req, res) => {
     try {
         const temperatureInstance = new TemperatureSingleton();
-        console.log(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor())['temperature']);
+        // console.log(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor())['temperature']);
         res.send(messages.TemperatureSensor.decode(temperatureInstance.getTemperatureSensor())['temperature']);
     } catch(error) {
         console.log(error);

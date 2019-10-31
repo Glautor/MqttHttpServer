@@ -47,6 +47,10 @@ async function mqttConnection(topic, message) {
     function publish(topic, msg, options){
         console.log("publishing", msg);
         if (client.connected == true){
+            if(msg == 'turnIn' || msg == 'turnOff') {
+                client.publish('devices/soundSystem/recebe', msg, options);
+                return 'success'                
+            }
             client.publish(topic, msg, options);
             return 'success'
         }
