@@ -8,6 +8,7 @@
 var amqp = require('amqplib/callback_api');
 
 const rabbitMQPub = (retrivedQueue, retrivedValue) => {
+    console.log(retrivedQueue, retrivedValue)
         //connect to RabbitMQ server
         amqp.connect('amqp://localhost', function (errConnection, connection) {
 
@@ -22,12 +23,12 @@ const rabbitMQPub = (retrivedQueue, retrivedValue) => {
                     throw errChannel;
                 }
 
-                //getting args from terminal
-                argsRetrived = process.argv.slice(2)
-                // get witch queue to send throught
-                retrivedQueue = argsRetrived[0]
-                // get value to send throught queue
-                retrivedValue = argsRetrived[1]
+                // //getting args from terminal
+                // argsRetrived = process.argv.slice(2)
+                // // get witch queue to send throught
+                // retrivedQueue = argsRetrived[0]
+                // // get value to send throught queue
+                // retrivedValue = argsRetrived[1]
 
                 //declare a queue for us to send to
                 let queue = retrivedQueue || 'No queue passed';
