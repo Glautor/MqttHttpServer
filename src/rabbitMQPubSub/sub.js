@@ -21,7 +21,9 @@ amqp.connect('amqp://localhost', function (errConnection, connection) {
             throw errChannel;
         }
 
-        var queue = 'pub_sub_meetup28';
+        
+        let choosedTopic = process.argv.slice(2).join(' ')
+        let queue = choosedTopic;
 
         /**
          * declare the queue from which we're going to consume
@@ -31,7 +33,7 @@ amqp.connect('amqp://localhost', function (errConnection, connection) {
             durable: false
           });
 
-        console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);  
+        console.log(" [*] Waiting for messages in %s topic. To exit press CTRL+C", queue);  
         
         /**
          * tell the server to deliver us the messages from the queue. 

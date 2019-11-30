@@ -21,11 +21,17 @@ amqp.connect('amqp://localhost', function (errConnection, connection) {
             throw errChannel;
         }
 
+        //getting args from terminal
+        argsRetrived = process.argv.slice(2)
+        // get witch queue to send throught
+        retrivedQueue = argsRetrived[0]
+        // get value to send throught queue
+        retrivedValue = argsRetrived[1]
 
         //declare a queue for us to send to
-        var queue = 'pub_sub_meetup28'
+        let queue = retrivedQueue || 'No queue passed';
         //recebendo uma mensagem via console, caso ela esteja em branco, envia um Hello World
-        var msg = process.argv.slice(2).join(' ') || 'Hello World!';
+        let msg = retrivedValue || 'No value passed';
     
         channel.assertQueue(queue, {
             durable: false
@@ -34,12 +40,13 @@ amqp.connect('amqp://localhost', function (errConnection, connection) {
         //publish a message to the queue:
         channel.sendToQueue(queue, Buffer.from(msg));
 
-        console.log(" [x] Sent %s", msg);
+        console.log(" [x] Sent %s through %s", msg, queue);
+
     });
 
     setTimeout(function () {
-         connection.close(); 
-         process.exit(0) 
+        connection.close(); 
+        process.exit(0) 
      }, 500);
 
 
