@@ -1,4 +1,5 @@
 const mqttConnection = require('./mqttConnection');
+const rabbitMQPub = require('./rabbitMQPubSub/pub');
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -23,9 +24,18 @@ app.get('/test', (req, res) => {
     }
 });
 
+// app.post('/sendMessage', (req, res) => {
+//     try {
+//         mqttConnection(TOPIC, req.body.message);
+//         res.send('success');
+//     } catch(error) {
+//         res.send(error);
+//     }
+// });
+
 app.post('/sendMessage', (req, res) => {
     try {
-        mqttConnection(TOPIC, req.body.message);
+        rabbitMQPub(req.body.topic, req.body.msg);
         res.send('success');
     } catch(error) {
         res.send(error);
