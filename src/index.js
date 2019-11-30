@@ -42,6 +42,7 @@ app.post('/sendMessage', (req, res) => {
     }
 });
 
+
 app.post('/getTemperature', (req, res) => {
     try {
         const temperatureInstance = new TemperatureSingleton();

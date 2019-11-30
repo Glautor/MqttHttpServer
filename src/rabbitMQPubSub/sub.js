@@ -5,47 +5,54 @@
  * Consumer run to listen for messages and print them out
  */
 
+
 var amqp = require('amqplib/callback_api');
+    
+    //open a connection
+    amqp.connect('amqp://localhost', function (errConnection, connection) {
 
-//open a connection
-amqp.connect('amqp://localhost', function (errConnection, connection) {
-
-    if (errConnection) {
-        throw errConnection;
-    }
-
-    //open a channel
-    connection.createChannel(function (errChannel, channel) {
-
-        if (errChannel) {
-            throw errChannel;
+        if (errConnection) {
+            throw errConnection;
         }
 
-        
-        let choosedTopic = process.argv.slice(2).join(' ')
-        let queue = choosedTopic;
+        //open a channel
+        connection.createChannel(function (errChannel, channel) {
 
-        /**
-         * declare the queue from which we're going to consume
-         * we want to make sure the queue exists before we try to consume messages from it
-         */
-        channel.assertQueue(queue, {
-            durable: false
-          });
+            if (errChannel) {
+                throw errChannel;
+            }
 
-        console.log(" [*] Waiting for messages in %s topic. To exit press CTRL+C", queue);  
-        
-        /**
-         * tell the server to deliver us the messages from the queue. 
-         * it will push us messages asynchronously, we provide a callback that will be executed when RabbitMQ pushes messages to our consumer.
-         */
-        channel.consume(queue, function(msg) {
-            console.log(" [x] Received %s", msg.content.toString());
-          }, {
-              noAck: true
+            let choosedTopics = process.argv.slice(2)
+            console.log(" [*] Waiting for messages in %s topic. To exit press CTRL+C", choosedTopics);  
+
+            choosedTopics.forEach(function(item,index){
+                console.log(item)
+
+                let queue = item;
+             
+                /**
+                 * declare the queue from which we're going to consume
+                 * we want to make sure the queue exists before we try to consume messages from it
+                 */
+                channel.assertQueue(queue, {
+                    durable: false
+                });
+
+                /**
+                 * tell the server to deliver us the messages from the queue. 
+                 * it will push us messages asynchronously, we provide a callback that will be executed when RabbitMQ pushes messages to our consumer.
+                 */
+                channel.consume(queue, function(msg) {
+                    console.log(" [x] Received %s", msg.content.toString());
+                }, {
+                    noAck: true
+                });
             });
 
-    });
+        });
 
 
-})
+    })
+
+
+
