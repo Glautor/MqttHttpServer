@@ -3,6 +3,8 @@ const rabbitMQPub = require('./rabbitMQPubSub/pub');
 const express = require('express');
 const bodyParser = require('body-parser');
 
+var cors = require('cors');
+
 var app = express();
 
 var TemperatureSingleton = require('./singleton/TemperatureSingleton.js');
@@ -42,7 +44,6 @@ app.post('/sendMessage', (req, res) => {
     }
 });
 
-
 app.post('/getTemperature', (req, res) => {
     try {
         const temperatureInstance = new TemperatureSingleton();
@@ -65,6 +66,7 @@ app.post('/getHumidity', (req, res) => {
 
 app.post('/startConnection', (req, res) => {
     try {
+        console.log(res);
         mqttConnection(TOPIC, 'INIT');
         res.send('success');
     } catch(error) {
@@ -85,6 +87,8 @@ event = () => {
 }
 
 event();
+
+app.use(cors());
 
 app.listen(4000, () => {
     console.log(`Server running on port 4000`)
