@@ -47,8 +47,7 @@ const rabbitMQPub = (retrivedQueue, retrivedValue) => {
             });
 
             setTimeout(function () {
-                connection.close(); 
-                process.exit(0) 
+                connection.close();  
             }, 500);
 
 
