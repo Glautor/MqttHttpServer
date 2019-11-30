@@ -2,7 +2,6 @@ const mqttConnection = require('./mqttConnection');
 const rabbitMQPub = require('./rabbitMQPubSub/pub');
 const express = require('express');
 const bodyParser = require('body-parser');
-
 var cors = require('cors');
 
 var app = express();
