@@ -4,6 +4,33 @@ const express = require('express');
 const bodyParser = require('body-parser');
 var cors = require('cors');
 
+/*****gRPC*****/
+let grpc = require("grpc");
+var protoLoader = require("@grpc/proto-loader");
+var readline = require("readline");
+
+//Load the protobuf
+var proto = grpc.loadPackageDefinition(
+    protoLoader.loadSync("src/protos/message.proto", {
+      keepCase: true,
+      longs: String,
+      enums: String,
+      defaults: true,
+      oneofs: true
+    })
+  );
+   
+  const REMOTE_SERVER = "0.0.0.0:5001";
+   
+  let device_name;
+   
+  //Create gRPC client
+  let client = new proto.example.Servico(
+    REMOTE_SERVER,
+    grpc.credentials.createInsecure()
+  );
+/*****gRPC*****/
+
 var app = express();
 
 var TemperatureSingleton = require('./singleton/TemperatureSingleton.js');
@@ -73,6 +100,17 @@ app.post('/startConnection', (req, res) => {
     }
 });
 
+app.post('/gRPC', (req, res) => {
+    try {
+        let channel = client.join({ device: device_name });      
+        client.send({ device: device_name, text: req.body.msg }, res => {});
+        res.send('success');
+    } catch(error) {
+        res.send(error);
+    }
+});
+
+
 var humidity = 0;
 event = () => {
     setTimeout(() => {
@@ -88,6 +126,8 @@ event = () => {
 event();
 
 app.use(cors());
+
+device_name = 'Aplicacao';
 
 app.listen(4000, () => {
     console.log(`Server running on port 4000`)
