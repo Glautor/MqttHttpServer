@@ -39,6 +39,7 @@ npm install
 * Iniciar aplicação
 ```bash
 node src/index.js 
+// Available on http://localhost:4000
 ```
 
 * Iniciar subscriber
